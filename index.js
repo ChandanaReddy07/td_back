@@ -22,10 +22,18 @@ mongoose.connect(process.env.DATABASE,{
 
 const PORT =  8081;
 // Modify your CORS configuration to specify the allowed origin
+const allowedOrigins = ['https://td-front.vercel.app']; // Define your allowed origins here
+
 const corsOptions = {
-    origin: 'https://td-front.vercel.app/',
-    credentials: true, // Enable credentials (cookies, authorization headers)
-  };
+  origin: function (origin, callback) {
+    // Check if the origin is in the allowed list or if it's undefined (non-browser requests)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block the request
+    }
+  }
+};
 //middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
