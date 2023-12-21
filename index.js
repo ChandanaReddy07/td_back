@@ -23,7 +23,7 @@ mongoose.connect(process.env.DATABASE,{
 const PORT =  8081;
 // Modify your CORS configuration to specify the allowed origin
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'https://td-front.vercel.app/',
     credentials: true, // Enable credentials (cookies, authorization headers)
   };
 //middlewares
