@@ -1,7 +1,14 @@
-const  Todo=require("../models/todo")
+const  Todo = require("../models/todo")
+const User= require("../models/user")
+
+const axios = require('axios');
+
+
+
+
+
 
 exports.getTodoById=(req,res,next,id)=>{
-   // console.log("im in id")
 
     Todo.findById(id).exec((err,todo)=>{
         if(err||!todo){
@@ -15,65 +22,96 @@ exports.getTodoById=(req,res,next,id)=>{
 }
 
 exports.getTodo=(req,res)=>{
-  //  console.log("im in")
     return res.json(req.todo);
 }
 
 
 //create todo
-exports.createTodo=(req,res)=>{
-const name=req.body.name;
-const description=req.body.description;
-const userId=req.profile._id;
+exports.createTodo = (req, res) => {
+    const { name, description } = req.body;
+    const userId = req.profile._id;
 
-  const todo= new Todo({name:name,description:description,userId:userId});
+    const todo = new Todo({ name, description, userId });
 
-  console.log("user",req.profile.name);
+    todo.save(async (err, todo) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({ err: "Can't save to the DB" });
+        }
 
-  todo.save((err,todo)=>{
-      if(err){
-          console.log(err)
-          return res.status(400).json({
-              err:"cant save to the DB"
-          })
-      }
-      res.json({todo});
-  })
-     
-}
+        try {
+            const user = await User.findById(userId);
+
+            if (user.startDate === null) {
+                user.startDate = new Date();
+
+            }
+
+           
+            await user.save();
+
+            // Additional logic if required
+            // ...
+
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
+
+
+        res.json({ todo });
+    });
+};
 
 
 //delete todo
-exports.deleteTodo= (req,res)=>{
+exports.deleteTodo = (req, res) => {
     let todo = req.todo;
-    console.log("todo",todo)
-   
-    todo.remove((err,todo)=>{
-        if(err){
-            res.status(400).json({
-                error:"failed to delete the todo"
-            })
-        }
-        res.json({
-            message : `deletion is succesful ${todo}`
-        })
-    })
-}
+    const userId = req.profile._id;
 
-//update todo
-exports.updateTodo= (req,res) => {
-    Todo.findByIdAndUpdate(
-    {
-        _id : req.todo._id,
-    },
-    {$set: req.body},
-    {new: true, useFindAndModify: false},
-    (err,user)=>{
-        if(err){
-            return res.status(400).json({
-                error: "you are not authorised to update this Todo"
-            })
+    todo.remove((err, todo) => {
+        if (err) {
+            return res.status(400).json({ error: "Failed to delete the todo" });
         }
-        res.json(user)
+
+        // Increment the deleted count for the user
+        User.findByIdAndUpdate(userId, { $inc: { 'taskCounts.deleted': 1 } }, (err, user) => {
+            if (err) {
+                console.log('Error updating task delete count:', err);
+            } else {
+
+               
+                // Send webhook after successful update
+            }
+        });
+        res.json({ message: `Deletion is successful: ${todo}` });
     });
 };
+
+
+//update todo
+exports.updateTodo = (req, res) => {
+    const userId = req.profile._id;
+
+    Todo.findByIdAndUpdate(
+        { _id: req.todo._id },
+        { $set: req.body },
+        { new: true, useFindAndModify: false },
+        (err, updatedTodo) => {
+            if (err) {
+                return res.status(400).json({ error: "You are not authorised to update this Todo" });
+            }
+
+            User.findByIdAndUpdate(userId, { $inc: { 'taskCounts.updated': 1 } }, (err, user) => {
+                if (err) {
+                    console.log('Error updating task update count:', err);
+                } else {
+                  
+                    // Send webhook after successful update
+                }
+            });
+
+            res.json(updatedTodo);
+        }    );
+};
+
+//bill

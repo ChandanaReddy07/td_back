@@ -11,7 +11,6 @@ exports.getUserById = (req, res, next, id) => {
         err: "no user found in database",
       });
     }
-    console.log(user);
     req.profile = user;
     next();
   });
@@ -45,7 +44,6 @@ exports.signup = (req, res) => {
   }
 
   const user = new User(req.body);
-  console.log("user", req.body);
   user.save((err, user) => {
     if (err) {
       console.log(err);
@@ -139,7 +137,6 @@ exports.userVerify=(req, res, next) => {
 // deleting user account
 exports.deleteUser = (req, res) => {
   let user = req.profile;
-  //console.log("user profile",user)
 
   user.remove((err, user) => {
     if (err) {
@@ -152,3 +149,4 @@ exports.deleteUser = (req, res) => {
     });
   });
 };
+
