@@ -90,6 +90,7 @@ router.get('/billing/:userId' , async (req, res) => {
       
         // Prepare the billing data
         const billingData = {
+            startDate: user.startDate,
             totalBill: user.currentAmount.toFixed(2), // Format to 2 decimal places
             actionCount: user.actionCount,
             isPaid : false,
