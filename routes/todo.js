@@ -113,7 +113,7 @@ router.post('/todo/generate-invoice/:userId', async (req, res) => {
     const user = await User.findById(userId);
     if (user) {
         await generateAndSendInvoice(user);
-        res.send('Invoice generation initiated');
+        res.send('Invoice is been sent to your email');
     } else {
         res.status(404).send('User not found');
     }
