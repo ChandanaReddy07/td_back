@@ -14,12 +14,29 @@ exports.generateAndSendInvoice=async (user)=> {
     const nextStartDate = new Date(billingDate); // Copy billing date
     nextStartDate.setDate(billingDate.getDate() + 1); // Increment by one day for next start date
 
+    // Aggregate the action counts
+    const aggregatedData = user.actionLogs.reduce(
+      (acc, log) => {
+        if (log.actionType === "POST") {
+          acc.created = (acc.created || 0) + 1;
+        } else if (log.actionType === "PUT") {
+          acc.updated = (acc.updated || 0) + 1;
+        } else if (log.actionType === "DELETE") {
+          acc.deleted = (acc.deleted || 0) + 1;
+        }
+        return acc;
+      },
+      { created: 0, updated: 0, deleted: 0 }
+    );
     const webhookPayload = {
         userEmail: user.email,
         totalAmount: user.currentAmount,
         startDate: formatDateToDDMMYYYY(user.startDate),
         billingDate: formatDateToDDMMYYYY(billingDate),
-        // Other relevant data can be added here
+        createdCount: aggregatedData.created,
+        updatedCount: aggregatedData.updated,
+        deletedCount: aggregatedData.deleted,
+        
     };
 
     try {

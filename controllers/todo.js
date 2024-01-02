@@ -50,9 +50,6 @@ exports.createTodo = (req, res) => {
            
             await user.save();
 
-            // Additional logic if required
-            // ...
-
         } catch (error) {
             console.error('Error updating user:', error);
         }
