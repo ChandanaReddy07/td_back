@@ -1,97 +1,37 @@
-<h1 align="center">Todo app✏️</h1>
- A simple to-do list app's backend with following features-
+# Backend Application README
 
--   User authentication using JWT and cookies
--   A todo endpoint which can add, delete, update and list all todos for a spfc. user
--   Todo endpoint will be only for signed in users
-<br>
+## Setting Up and Running the Application
 
+1. **Clone the Repository**
+   - Clone the backend repository to your local machine.
 
-[👉 Postman Link](https://www.getpostman.com/collections/905cfb6344b05509378a)
+2. **Install Dependencies**
+   - Run `npm install` in the project directory to install required dependencies.
 
+3. **Environment Configuration**
+   - Create a `.env` file in the project root.
+   - Define the following environment variables:
+     - `DATABASE`: Your MongoDB connection URL.
+     - `ZAP_WEBHOOK`: The URL for the Zapier webhook.
 
-<h2>Tech-stack</h2>
+4. **Zapier Webhook Setup**
+   - Log into [Zapier](https://zapier.com/).
+   - Create a new Zap with "Catch Hook" in "Webhooks by Zapier".
+   - Set up an action to send an email.
+   - Copy the webhook URL provided by Zapier into the `.env` file.
 
--   Nodejs ,  Expressjs , MongoDB
+5. **Starting the Server**
+   - Run `npm start` to start the server.
 
-<br>
+## Features
 
+- **Google OAuth Integration**: For user authentication.
+- **CRUD Operations**: Manage tasks or other entities through Create, Read, Update, Delete (CRUD) functionalities.
+- **Usage and Billing API**: To track and bill user activities.
+- **Automated Invoice Generation**: Utilizes a cron job (`node-cron`) to trigger the Zapier webhook monthly, sending invoices via email.
 
-<h2>Endpoints</h2>
+## Additional Notes
 
-<table align="center">
-
-<tr>
-
-<th>Endpoints</th>
-
-<th>Description</th>
-
-</tr>
-
-<tr>
-
-<td>/signup</td>
-
-<td>To signup new user</td>
-
-</tr>
-
-<tr>
-
-<td>/signin</td>
-
-<td>To signin an existing user</td>
-
-</tr>
-
-<tr>
-
-<td>/signout</td>
-
-<td>To sigout a user</td>
-
-</tr>
-
-<tr>
-
-</tr>
-
-<tr>
-
-<td>(POST) /todo/create/:userId</td>
-
-<td>For creating a new Todo item</td>
-
-</tr>
-
-
-
-<tr>
-
-<td>(PUT) /todo/:todoId/:userId</td>
-
-<td>For updating an existing Todo item</td>
-
-</tr>
-
-<tr>
-
-<td>(DELETE) /todo/:todoId/:userId</td>
-
-<td>for deleting an existing Todo item</td>
-
-</tr>
-
-<tr>
-
-<td>(GET)  /tods/:userId</td>
-
-<td>For listing all Todos of a specific user</td>
-
-</tr>
-
-</table>
-<br>
-
-
+- Ensure MongoDB and Zapier configurations are correctly set up.
+- The server utilizes Express.js and connects to MongoDB for data management.
+- Regularly check server logs for any errors or issues.
