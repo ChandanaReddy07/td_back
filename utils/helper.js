@@ -14,6 +14,8 @@ exports.generateAndSendInvoice=async (user)=> {
     const nextStartDate = new Date(billingDate); // Copy billing date
     nextStartDate.setDate(billingDate.getDate() + 1); // Increment by one day for next start date
 
+    console.log("hey1")
+
     // Aggregate the action counts
     const aggregatedData = user.actionLogs.reduce(
       (acc, log) => {
@@ -28,6 +30,9 @@ exports.generateAndSendInvoice=async (user)=> {
       },
       { created: 0, updated: 0, deleted: 0 }
     );
+
+    console.log("hey2")
+
     const webhookPayload = {
         userEmail: user.email,
         totalAmount: user.currentAmount,
