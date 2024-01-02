@@ -6,13 +6,13 @@ const User = require('../models/user');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
-const client = new OAuth2Client('165139008887-n95m1k0s7obbffja33ne66mi3l35vide.apps.googleusercontent.com');
+const client = new OAuth2Client('1093363613051-udeii0li481lvl2rogt9c1ade7vu12ug.apps.googleusercontent.com');
 
 
 function verifyToken(token) {
   return client.verifyIdToken({
     idToken: token,
-    audience: '165139008887-n95m1k0s7obbffja33ne66mi3l35vide.apps.googleusercontent.com'
+    audience: '1093363613051-udeii0li481lvl2rogt9c1ade7vu12ug.apps.googleusercontent.com'
   });
 }
 
