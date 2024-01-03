@@ -1,18 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-// const passport = require("passport");
 const router = express.Router();
 const User = require('../models/user');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
-const client = new OAuth2Client('1093363613051-udeii0li481lvl2rogt9c1ade7vu12ug.apps.googleusercontent.com');
+const client = new OAuth2Client(process.env.GOOGLEAUTH_KEY);
 
 
 function verifyToken(token) {
   return client.verifyIdToken({
     idToken: token,
-    audience: '1093363613051-udeii0li481lvl2rogt9c1ade7vu12ug.apps.googleusercontent.com'
+    audience: process.env.GOOGLEAUTH_KEY
   });
 }
 

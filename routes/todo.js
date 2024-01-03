@@ -2,7 +2,7 @@ const express=require("express")
 const router=express.Router();
 
 const {createTodo,getTodo,getTodoById,deleteTodo,updateTodo} = require("../controllers/todo")
- const {isSignedIn,isAuthenticated,getAllTodo,deleteUser,userVerify} = require("../controllers/users")
+ const {getAllTodo} = require("../controllers/users")
 const {getUserById} = require("../controllers/users")
 const User = require("../models/user");
 const { billUpdater, generateAndSendInvoice } = require("../utils/helper");
@@ -24,8 +24,7 @@ router.get("/todo/:todoId/:userId",getTodo);
 
 //delete todo route
 router.delete("/todo/:todoId/:userId",billUpdater,deleteTodo)
-//delete user route
-router.delete("/user/:userId",isSignedIn,isAuthenticated,deleteUser)
+
 
 
 //update todo route
@@ -72,12 +71,6 @@ router.get('/user/taskcounts/:userId', async (req, res) => {
     }
 });
 
-//billing
-const COST_PER_ACTION = {
-    'create': 0.1,
-    'update': 0.2,
-    'delete': 0
-};
 
 router.get('/billing/:userId' , async (req, res) => {
     try {
@@ -87,7 +80,7 @@ router.get('/billing/:userId' , async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found');
         }
-      
+      ;
         // Prepare the billing data
         const billingData = {
             startDate: user.startDate,
@@ -105,9 +98,6 @@ router.get('/billing/:userId' , async (req, res) => {
 });
 
 
-
-
-// Example Express.js route
 router.post('/todo/generate-invoice/:userId', async (req, res) => {
     const userId = req.params.userId;
     const user = await User.findById(userId);

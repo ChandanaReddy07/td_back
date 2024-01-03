@@ -7,11 +7,7 @@ const actionLogSchema = require('./action');
 const billSchema = new Schema({
     
    
-    // // Billing cycle count to track the number of times the user has been billed
-    // billingCycleCount: {
-    //     type: Number,
-    //     default: 0
-    // },
+   
     totalAmount:{
         type:Number,
         default:0
