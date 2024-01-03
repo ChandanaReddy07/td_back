@@ -52,7 +52,7 @@ exports.generateAndSendInvoice=async (user)=> {
         user.currentAmount = 0;
         user.actionCount = 0;
         user.actionLogs = [];
-        user.startDate = nextStartDate;
+        user.startDate = new Date();
         await user.save();
     } catch (error) {
         console.error('Error sending invoice:', error);
